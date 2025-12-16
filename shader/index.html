@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en" style = "overflow-y: auto; overflow-x: hidden">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Serif+Text:ital@0;1&family=Hedvig+Letters+Serif:opsz@12..24&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <link href="../styles.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-glsl.min.js"></script>
+        <title>My Webpage</title>
+    </head>
+
+
+    <body style="overflow-y: auto; overflow-x: hidden">
+        <header>
+            <!--idk what to put here-->
+            <nav>
+                <a href="..\index.html">home</a>
+                <a href="..\about\index.html">about</a>
+                <a href="index.html">shader info</a>
+                <a href="..\contact\index.html">contact</a>
+                <!-- put navbar stuff here-->
+            </nav>
+        </header>
+        <section class="hero" >
+            <section class = "not-homepage-canvas">
+            <div class="gradient-canvas"></div>
+            <div class="hero-logo" style = "top: 20%; align-items: flex-start; padding-left: 10%">
+                <h1 style="color: white">What are <span style = "font-style: italic">shaders?</span></h1>
+
+        </div>
+        </section>
+            <div class = "hero-desc">
+                <div class = "hero-desc-left">
+                <h2>Shaders are confusing.</h2>
+                <p style= "color: black">They run using a series of complicated equations concurrently, but what does that mean...</p>
+                </div>
+                <div class = "hero-desc-right">
+                <img src="/src/img/think-emoji.png" alt="thinking emoji huhhhh">
+                <pre>
+<code class="language-clike">void main()
+{
+vec3 color1 = vec3(1.0, 0.0, 0.0);
+gl_FragColor = vec4(color, 1.0);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+        <h2 class="lame-h2">What are they?</h2>
+        <p class="lame-p">Shaders are essentially small programs that run on the GPU, which control what you see on certain objects, as they are rendered. They run on the GPU instead of the CPU due to the complexity which comes with rendering graphics. The shaders have to run parallel on thousands of GPU cores, which can allow for fast graphics work.</p>
+        <section class="underneath-hero-section">
+        <hr>
+            <h1 style="margin-left: -2.5%">Types of Shaders:</h1>
+            <div class="shader-types">
+                <div class="shader-card">
+                    <h2>Vertex Shaders</h2>
+                    <p></p>
+                <pre>
+<code class="language-clike">//Vertex Shader - Transforms 3D positions to screen coordinates
+
+attribute vec3 position; //Input: vertex position from the 3D model
+attribute vec2 uv; //Input: UV coordinates for texture mapping (range from 0-1)
+uniform mat4 modelViewMatrix; //Uniform: transformation matrix from model space to view space
+uniform mat4 projectionMatrix; //Unform: transformation matrix from view space to screen space
+varying vec2 vUv; //Output: pass the UV coords to the fragment shader
+
+void main()
+{
+    vUv = uv; //Pasing the UV coordinates to the fragment shader
+
+    //This short snippet below does a LOT, it's transforming the vertex position through the model-view-projection pipeline
+    //Step 1: vec4(position, 1.0) converts the vec3 to a vec4 (adding a homogeneous coordinate)
+    //Step 2: modelViewMatrix positions, rotates, and scales the vertex
+    //Step 3: projectionMatrix projects 3D to 2D screen coordinates
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}</code></pre>
+                    <p><span style="font-style:italic">What it does:</span> Transforms 3D positions to the on screen coordinates</p>
+                </div>
+                <div class="shader-card">
+                    <h2>Fragment Shaders</h2>
+                    <pre>
+<code class="language-clike">//Fragment Shaders - Transforms 3D positions to screen coordinates
+varying vec2 vUv; //Input: Takes UV coords from the vertex shader
+
+unifrom vec3 color; //Uniform: chosen solid colors to apply
+void main()
+{
+    gl_FragColor = vec4(color, 1.0); // Sets each pixels color (the RGB value from uniform variable above)
+}</code></pre>
+                    <p><span style="font-style:italic">What it does:</span> Applies color to each pixel, can be used to apply textures as well.</p>
+                </div>
+                </div>
+                <div class="shader-card">
+                    <h2>Geometric Shaders</h2>
+                    <pre>
+<code class="language-clike">//Geometric Shaders - Generates new geometry from existing primitives
+//primitives are the basic variables in coding that cannot be broken down anymore, like booleans, or integers
+
+#version 330 core //this is the OpenGL shading language (GLSL) this is the shader.
+
+layout (points) in; // Input: receives the points (individual verticies)
+
+layout (line_strip, max_vertices = 2) out; // Output: emits line strips (the connected lines), or 2 vertices that are connected
+void main()
+{
+    // Taking your input points and making the lines from it
+
+    gl_Position = gl_in[0].gl_Position + vec4(-0.1, 0.0, 0.0, 0.0); // First vertex: 0.1 units to the left of the input point
+    EmitVertex(); //Sends first vertex to the next stage
+
+    gl_Position = gl_in[0].gl_Position + vec4(0.1, 0.0, 0.0, 0.0); // Second vertex: 0.1 units to the right of the input point
+    EmitVertex(); // Sends second vertex to the next stage
+
+    EndPrimitive(); // Completes the line
+}</code></pre>
+                    <p><span style="font-style:italic">What it does:</span> Generates the coordinates used by the engine to create the 3D objects.</p>
+                </div>
+                </div>
+                <div class="shader-card">
+                    <h2>Compute Shaders</h2>
+                    <pre>
+<code class="language-clike">//Compute Shader - Generally used for GPU computation and not renderering
+
+#version 430 // uses a different version from the geometric shaders, not for renderering
+
+layout(local_size_x = 256) in; //Defines how many threads to run at once
+
+struct Particle
+{
+    vec3 position; //current position in 3D space
+    vec3 velocity; // Current velocity, vec3 to show speed and x,y direction
+};
+
+//This code is to tell the GPU how to organize and access the data
+//std430 is the Memory Layout Standard, which is a packing rule for the GPU
+//the buffer connects to the binding point 0 on the GPU, it's like a USB port number
+//Binding 0 is for particle data, Binding 1 is for physics forces, Binding 2 is for Collision data, etc..
+layout(std430, binding = 0) buffer Particles
+{
+    Particle particles[]; //Dynamic particles array to allow the GPU to create as many particles as it wants
+}
+
+uniform float deltaTime; //Uniform: time elapsed since last frame
+
+void main()
+{
+    uint index = gl_GlobalInvocationID.x; //Gets unique index for the thread
+
+    particles[index].velocity.y -= 9.8 * deltaTime; //Uses time variable times 9.8 to simulate Earth's gravity (-9.8 m/s^2) to apply vertical velocity
+
+    particles[index].position += particles[index].velocity * deltaTime; //Updates position based on velocity
+}</code></pre>
+                    <p><span style="font-style:italic">What it does:</span> Used to simulate gravity or complex math equations on a bunch of items.</p>
+                </div>
+                </div>
+                <div class="shader-card">
+                    <h2>Tessellation Shaders</h2>
+                    <pre>
+<code class="language-clike">//Tesselation Control Shader - Determines how much to subdivide gravity
+
+#version 400 //Once again different version needed
+
+layout(vertices = 3) out; // Output: each call processes one vertex of a 3 vertex triangle
+
+void main()
+{
+    //Set outer tessellation levels (subdivisions per edge)
+    //Higher numbers create more detail/vertices
+    gl_TessLevelOuter[0] = 4.0; //Edge between vertex 1 and 2
+    gl_TessLevelOuter[1] = 4.0; //Edge between vertex 2 and 3
+    gl_TessLevelOuter[2] = 4.0; //Edge between vertex 3 and 1
+
+    gl_TessLevelInner[0] = 4.0; // Sets subdivisions inside triangle
+
+    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position; //Passes through vertex position unchanged
+}</code></pre>
+                    <p><span style="font-style:italic">What it does:</span> Subdivides models/triangles to create MORE triangles. </p>
+                </div>
+                </div>
+                <div class="shader-card">
+                    <h2>Summary by Use Case</h2>
+                    <ul>
+                        <li>Vertex Shader - Required, transforms 3D geometry to screen space</li>
+                        <li>Fragment Shader - Required, calculates color/texture for each pixel (I'm only using Fragment Shaders with a standard Vertex Shader for my project)</li>
+                        <li>Geometry Shader - Optional, generates new geometry (fur, grass, etc) </li>
+                        <li>Compute Shader - Optional, general GPU computation (complex equations, physics, AI)</li>
+                        <li>Tessellation Shaders - Optional, adds detail to geometry by adding triangles, lower resource than making high poly models (terrain, smooth surfaces)</li>
+
+                    </ul>
+                </div>
+            </div>
+            </div>
+            <h2 >Common Questions:</h2>
+        </section>
+
+        <section class="questions-section">
+            <div class="question-card">
+                <h2>What is a Vector?</h2>
+                <p>Vectors are essentially just variables that hold multiple values,
+                    but in GLSL the values they take are used to create the shapes you see.
+                </p>
+                <li>vec2 - 2D Vectors: typically used to take X,Y coordinates</li>
+                <li>vec3 - 3D Vectors: typically used to take RGB values, or 3D positions</li>
+                <li>vec4 - 4D Vectors: typically used to take RGBA values, or 3D positions with a homogenous coordinate</li>
+            </div>
+            <div class="question-card">
+                <h2>What is Tessellation?</h2>
+                <p>Tessellation is just the turning of one triangle into many smaller triangles, giving you more vertices
+                    to work with for finer detailing. It's used for the creation of high polygon models where you want to create
+                    them in a well-optimized way. It uses less vertices while keeping high detail. It's used
+                    a lot in video games for terrain generation!
+                </p>
+            </div>
+            <div class="question-card">
+                <h2>What is a Homogeneous Coordinate?</h2>
+                <p>A Homogeneous Coordinate is the last value in a 4D vector, it usually has the value of 0.0 or 1.0, it exists to tell
+                    us whether the vector can be translated, when translating a vector some points cannot move, this tells us which ones cannot.
+
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+
+                    theres a lotta empty space here huh...
+                </p>
+            </div>
+
+            <div class="question-card">
+                <h2>What is the GPU?</h2>
+                <p> A GPU (Graphics Processing Unit) is a specialized electronic circuit designed to
+                    rapidly manipulate and alter memory to accelerate the creation of images for display,
+                    handling complex visual tasks like gaming, <span style="color:red">video renderering</span>, and powering
+                    AI/machine learning by processing vast amounts of data in parallel, acting as a specialized brain for <span style="color:red">graphics and intense computation.</span>
+                    Unlike a CPU (Central Processing Unit), which is good for sequential tasks, a GPU excels at doing thousands of smaller calculations simultaneously,
+                    making it crucial for modern computing beyond just visuals.
+                    <br>
+                    <br>
+                    - Google 2025
+                </p>
+            </div>
+        </section>
+        <script type = "module" src = "../shaders.js"></script>
+        <script type = "module" src = "../script.js"></script>
+        <script>
+
+        window.FLUID_CONFIG =
+        {
+            brushSize: 25.0,
+            brushStrength: 0.5,
+            distortionAmount: 1.0,
+            fluidDecay: 0.95,
+            trailLength: 0.8,
+            stopDecay: 0.85,
+            color1: "#ffb3b3",
+            color2: "#c1121f",
+            color3: "#5a0000",
+            color4: "#8f1d1d",
+            colorIntensity: 1.0,
+            softness: 0.5,
+        };
+        </script>
+
+    </body>
+</html>
