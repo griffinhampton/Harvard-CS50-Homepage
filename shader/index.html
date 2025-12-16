@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-glsl.min.js"></script>
         <link rel="icon" type="image/png" href="../src/img/logo.png">
         <title>Shader Page</title>
@@ -43,9 +44,9 @@
                 <p style= "color: black">They run using a series of complicated equations concurrently, but what does that mean...</p>
                 </div>
                 <div class = "hero-desc-right">
-                <img src="/src/img/think-emoji.png" alt="thinking emoji huhhhh">
+                <img src="../src/img/think-emoji.png" alt="thinking emoji huhhhh">
                 <pre>
-<code class="language-clike">void main()
+<code class="language-javascript">void main()
 {
 vec3 color1 = vec3(1.0, 0.0, 0.0);
 gl_FragColor = vec4(color, 1.0);
@@ -63,7 +64,7 @@ gl_FragColor = vec4(color, 1.0);
                     <h2>Vertex Shaders</h2>
                     <p></p>
                 <pre>
-<code class="language-clike">//Vertex Shader - Transforms 3D positions to screen coordinates
+<code class="language-javascript">//Vertex Shader - Transforms 3D positions to screen coordinates
 
 attribute vec3 position; //Input: vertex position from the 3D model
 attribute vec2 uv; //Input: UV coordinates for texture mapping (range from 0-1)
@@ -86,7 +87,7 @@ void main()
                 <div class="shader-card">
                     <h2>Fragment Shaders</h2>
                     <pre>
-<code class="language-clike">//Fragment Shaders - Transforms 3D positions to screen coordinates
+<code class="language-javascript">//Fragment Shaders - Transforms 3D positions to screen coordinates
 varying vec2 vUv; //Input: Takes UV coords from the vertex shader
 
 unifrom vec3 color; //Uniform: chosen solid colors to apply
@@ -100,7 +101,7 @@ void main()
                 <div class="shader-card">
                     <h2>Geometric Shaders</h2>
                     <pre>
-<code class="language-clike">//Geometric Shaders - Generates new geometry from existing primitives
+<code class="language-javascript">//Geometric Shaders - Generates new geometry from existing primitives
 //primitives are the basic variables in coding that cannot be broken down anymore, like booleans, or integers
 
 #version 330 core //this is the OpenGL shading language (GLSL) this is the shader.
@@ -126,7 +127,7 @@ void main()
                 <div class="shader-card">
                     <h2>Compute Shaders</h2>
                     <pre>
-<code class="language-clike">//Compute Shader - Generally used for GPU computation and not renderering
+<code class="language-javascript">//Compute Shader - Generally used for GPU computation and not renderering
 
 #version 430 // uses a different version from the geometric shaders, not for renderering
 
@@ -163,7 +164,7 @@ void main()
                 <div class="shader-card">
                     <h2>Tessellation Shaders</h2>
                     <pre>
-<code class="language-clike">//Tesselation Control Shader - Determines how much to subdivide gravity
+<code class="language-javascript">//Tesselation Control Shader - Determines how much to subdivide gravity
 
 #version 400 //Once again different version needed
 
